@@ -1,3 +1,42 @@
+/*
+
+bottom view
+
+   ____________________________________
+1  | +5V - Vin          CLK           |
+2  | CMD - NC           S00           |
+3  | S03 - NC           S01           |
+4  | S02 - NC           G15           |
+5  | G13 - Start        G02           |
+6  | GND                G00           |
+7  | G12 - LED Data     G04           |
+8  | G14 - NC           G16 - Blue
+9  | G27 - red          G17 - Yellow
+10 | G26 - NC           G05           |
+11 | G25 - SPK          G18           |
+12 | G33 - NC           G19           |
+13 | G32 - green        GND           |
+14 | G35 - NC           G21           |
+15 | G34 - NC           RXD           |
+16 |  SN - NC           TXD           |
+17 |  SP - NC           G22           |
+18 |  EN - NC           G23           |
+19 |  3.3V              GND           |
+   |__________________________________|
+
+to the outside:
+6 Red - orange/white
+5 Green - green/white
+4 Blue - blue/white
+3 Yellow -brown/white
+8 GND - brown
+1 Speaker - blue
+7 +5V - orange
+2 Start - green
+
+*/
+
+
 #include <Arduino.h>
 #include <Bounce2.h>
 #include <FastLED.h>
@@ -105,7 +144,7 @@ horse player[4];
 const uint16_t horsecolors[]= {0,96,192,80};
 const uint16_t horsepins[]= {27,32,17,16};
 
-#define NUM_LEDS 300
+#define NUM_LEDS 301
 #define DATA_PIN 12
 #define CLOCK_PIN -1
 
@@ -174,6 +213,7 @@ void PlayGame() { //rondes not used yet
 
   for (int i=0;i<AANTAL_SPELERS;i++) {
     if(player[i].update()) {
+      if (RacePos==1) EndGame.set(30000,GameReset);
       player[i].place=RacePos++;
       if (RacePos > AANTAL_SPELERS) {
         EndGame.set(10000,GameReset);
@@ -189,6 +229,7 @@ void PlayGame() { //rondes not used yet
 }
 
 void LedstringVisualize() {
+  leds[0]=CRGB::White;
   for (int i=0;i<AANTAL_SPELERS;i++) {
     
     if (player[i].place > 0) {
@@ -197,7 +238,13 @@ void LedstringVisualize() {
         leds[30-player[i].place*5-j]= CHSV(player[i].color, 255, 255);
 
       }
-    } else leds[player[i].Int_position] = CHSV(player[i].color, 255, 255);
+    } //else leds[player[i].Int_position+1] = CHSV(player[i].color, 255, 255);
+  }
+  for (int i=0;i<AANTAL_SPELERS;i++) {
+     if (player[i].place == 0) {
+      leds[player[i].Int_position+1] = CHSV(player[i].color, 255, 255);
+     }
+
   }
    
    
@@ -206,6 +253,7 @@ void LedstringVisualize() {
 }
 
 void GameReset() {
+  game.disable();
   for (int i=0;i<AANTAL_SPELERS;i++) {
     player[i].reset();
   }
