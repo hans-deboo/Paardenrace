@@ -25,14 +25,13 @@ bottom view
    |__________________________________|
 
 to the outside:
-6 Red - orange/white
-5 Green - green/white
-4 Blue - blue/white
-3 Yellow -brown/white
+6 Red - orange/white -> rode knop
+5 Green - green/white -> gele knop
+4 Blue - blue/white -> groene knop
+3 Yellow -brown/white -> blauwe knop
 8 GND - brown
 1 Speaker - blue
-7 +5V - orange
-2 Start - green
+7 +5V - orange- green
 
 */
 
@@ -141,7 +140,7 @@ void play_starttones();
  
 horse player[4];
 
-const uint16_t horsecolors[]= {0,96,192,80};
+const uint16_t horsecolors[]= {HUE_BLUE,HUE_GREEN,HUE_YELLOW,HUE_RED};
 const uint16_t horsepins[]= {27,32,17,16};
 
 #define NUM_LEDS 301
